@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --text-primary: #2d3748;
+            --text-secondary: #718096;
+            --accent: #4299e1;
+            --accent-hover: #3182ce;
+            --border: #e2e8f0;
+            --card-bg: #ffffff;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #1a202c;
+            --bg-secondary: #2d3748;
+            --text-primary: #f7fafc;
+            --text-secondary: #cbd5e0;
+            --accent: #63b3ed;
+            --accent-hover: #4299e1;
+            --border: #4a5568;
+            --card-bg: #2d3748;
+            --shadow: rgba(0, 0, 0, 0.3);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            border-color: var(--accent);
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeIn 0.8s ease;
+        }
+
+        .avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: white;
+            box-shadow: 0 10px 30px var(--shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .avatar:hover {
+            transform: scale(1.05);
+        }
+
+        .name {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .title {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .bio {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .social-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: 50px;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .social-link:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+
+        .section {
+            margin-bottom: 3rem;
+            animation: fadeIn 0.8s ease;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .skill-card {
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+            box-shadow: 0 10px 25px var(--shadow);
+        }
+
+        .skill-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .skill-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .skill-level {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .project-card {
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+            box-shadow: 0 10px 25px var(--shadow);
+        }
+
+        .project-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .project-description {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .project-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .tag {
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+        }
+
+        .project-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .project-link {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .project-link:hover {
+            color: var(--accent-hover);
+        }
+
+        .contact-section {
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .contact-text {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .contact-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: var(--accent);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .contact-button:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .name {
+                font-size: 2rem;
+            }
+
+            .title {
+                font-size: 1rem;
+            }
+
+            .theme-toggle {
+                top: 1rem;
+                right: 1rem;
+                width: 40px;
+                height: 40px;
+                font-size: 1.25rem;
+            }
+
+            .skills-grid {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        🌙
+    </button>
+
+    <div class="container">
+        <header class="profile-header">
+            <div class="avatar">👨‍💻</div>
+            <h1 class="name">Your Name</h1>
+            <p class="title">Full Stack Developer | Open Source Enthusiast</p>
+            <p class="bio">
+                Passionate developer building innovative solutions. I love creating elegant code 
+                and solving complex problems. Always learning, always growing.
+            </p>
+            <div class="social-links">
+                <a href="https://github.com/yourusername" class="social-link" target="_blank">
+                    <span>📦</span>
+                    <span>GitHub</span>
+                </a>
+                <a href="https://linkedin.com/in/yourusername" class="social-link" target="_blank">
+                    <span>💼</span>
+                    <span>LinkedIn</span>
+                </a>
+                <a href="https://twitter.com/yourusername" class="social-link" target="_blank">
+                    <span>🐦</span>
+                    <span>Twitter</span>
+                </a>
+                <a href="mailto:your.email@example.com" class="social-link">
+                    <span>📧</span>
+                    <span>Email</span>
+                </a>
+            </div>
+        </header>
+
+        <section class="section">
+            <h2 class="section-title">Skills</h2>
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <div class="skill-icon">⚛️</div>
+                    <div class="skill-name">React</div>
+                    <div class="skill-level">Advanced</div>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">🟢</div>
+                    <div class="skill-name">Node.js</div>
+                    <div class="skill-level">Advanced</div>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">🐍</div>
+                    <div class="skill-name">Python</div>
+                    <div class="skill-level">Intermediate</div>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">🎨</div>
+                    <div class="skill-name">CSS</div>
+                    <div class="skill-level">Advanced</div>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">📊</div>
+                    <div class="skill-name">TypeScript</div>
+                    <div class="skill-level">Advanced</div>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">🗄️</div>
+                    <div class="skill-name">SQL</div>
+                    <div class="skill-level">Intermediate</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Projects</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <h3 class="project-title">Project One</h3>
+                    <p class="project-description">
+                        A modern web application built with React and Node.js that helps users 
+                        manage their daily tasks efficiently.
+                    </p>
+                    <div class="project-tags">
+                        <span class="tag">React</span>
+                        <span class="tag">Node.js</span>
+                        <span class="tag">MongoDB</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="#" class="project-link">View Demo →</a>
+                        <a href="#" class="project-link">GitHub →</a>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <h3 class="project-title">Project Two</h3>
+                    <p class="project-description">
+                        An open-source library for building responsive UI components with 
+                        accessibility in mind.
+                    </p>
+                    <div class="project-tags">
+                        <span class="tag">TypeScript</span>
+                        <span class="tag">CSS</span>
+                        <span class="tag">Accessibility</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="#" class="project-link">View Demo →</a>
+                        <a href="#" class="project-link">GitHub →</a>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <h3 class="project-title">Project Three</h3>
+                    <p class="project-description">
+                        A data visualization tool that transforms complex datasets into 
+                        beautiful, interactive charts.
+                    </p>
+                    <div class="project-tags">
+                        <span class="tag">Python</span>
+                        <span class="tag">D3.js</span>
+                        <span class="tag">Flask</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="#" class="project-link">View Demo →</a>
+                        <a href="#" class="project-link">GitHub →</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Get In Touch</h2>
+            <div class="contact-section">
+                <p class="contact-text">
+                    I'm always interested in hearing about new opportunities, collaborations, 
+                    or just having a chat about technology. Feel free to reach out!
+                </p>
+                <a href="mailto:your.email@example.com" class="contact-button">
+                    Say Hello 👋
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        
+        // Check for saved theme preference or default to light mode
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        html.setAttribute('data-theme', currentTheme);
+        updateThemeIcon(currentTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+        });
+
+        function updateThemeIcon(theme) {
+            themeToggle.textContent = theme === 'light' ? '🌙' : '☀️';
+        }
+
+        // Add scroll animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.section').forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(20px)';
+            section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html> 
